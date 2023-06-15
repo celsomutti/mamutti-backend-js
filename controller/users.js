@@ -1,33 +1,41 @@
 const sequelize = require('sequelize');
 const model = require('../models');
+const { response } = require('express');
 const Op = sequelize.Op;
-const user = model.user;
+const user = model.users;
+const bcrypt = require('bcrypt');
+
+const salt = bcrypt.genSaltSync();
 
 module.exports = {
     async create(request, response) {
         try {
             const {
-                nomeCompleto,
-                nomeUsuario,
-                senhaUsuario,
-                tipoUsuario,
-                cadastro,
-                situacao
+                fullName,
+                userName,
+                password,
+                userType,
+                register,
+                email,
+                status
             } = request.body
             
+            password = bcrypt.hashSync(password, salt);
+
             const User = await user.create({
-                nomeCompleto,
-                nomeUsuario,
-                senhaUsuario,
-                tipoUsuario,
-                cadastro,
-                situacao            
+                fullName,
+                userName,
+                password,
+                userType,
+                register,
+                email,
+                status
             });
 
-            return response.json({ msg: "Usuário cadastrado com sucesso!"});
+            return response.json({ msg: "Usuário cadastrado com sucesso!" });
 
         } catch (error) {
-            return response.json({ msg:"Não foi possivel cadastrar u usuário: " + error });
+            return response.json({ msg:"Não foi possivel cadastrar o usuário: " + error });
         }
     }, 
 
@@ -36,21 +44,21 @@ module.exports = {
             const { id } = request.params;
 
             const {
-                nomeCompleto,
-                nomeUsuario,
-                senhaUsuario,
-                tipoUsuario,
-                cadastro,
-                situacao
+                fullName,
+                userName,
+                userType,
+                register,
+                email,
+                status
             } = request.body
 
             const User = await user.update({
-                nomeCompleto,
-                nomeUsuario,
-                senhaUsuario,
-                tipoUsuario,
-                cadastro,
-                situacao
+                fullName,
+                userName,
+                userType,
+                register,
+                email,
+                status
             }, { where: { id } });
 
             return response.json({ msg: "Usuário alterado com sucesso!" });
@@ -62,15 +70,16 @@ module.exports = {
     async findAll(request, reponse) {
         try {
             const { page } = request.params;
-            const limitView = 5;
+            const limite = 5;
 
             const User = await user.findAndCountAll({
                 order: [
-                    ['nomeCompleto', 'ASC']
+                    ['id', 'ASC']
                 ],
-                limit: limitView,
+                limit: limite,
                 offset: parseInt(page)
             })
+
             return response.json(User);
 
         } catch (error) {
@@ -89,6 +98,25 @@ module.exports = {
             return response.json({ msg: "Usuário excluído com sucesso!" });
         } catch (error) {
             return response.json({ msg: "Não foi possível excluir o usuário: " + error });
+        }
+    },
+
+    async changePassword(request, response) {
+        try {
+            const { userLogin } = request.params;
+            
+            const {
+                password
+            } = request.body           
+
+            const User = await user.update({
+                password //: bcrypt.hashSync(password, salt)
+            }, 
+                { where: { userName: userLogin } }
+            );
+            return response.json({ msg: "Senha alterada com sucesso!" });
+        } catch (error) {
+            return response.json({ msg: "Não foi possível alterar a senha: " + error });
         }
     }
 }
