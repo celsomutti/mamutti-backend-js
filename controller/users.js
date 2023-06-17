@@ -3,9 +3,6 @@ const model = require('../models');
 const { response } = require('express');
 const Op = sequelize.Op;
 const user = model.users;
-const bcrypt = require('bcrypt');
-
-const salt = bcrypt.genSaltSync();
 
 module.exports = {
     async create(request, response) {
@@ -19,8 +16,6 @@ module.exports = {
                 email,
                 status
             } = request.body
-            
-            password = bcrypt.hashSync(password, salt);
 
             const User = await user.create({
                 fullName,
@@ -110,7 +105,7 @@ module.exports = {
             } = request.body           
 
             const User = await user.update({
-                password //: bcrypt.hashSync(password, salt)
+                password 
             }, 
                 { where: { userName: userLogin } }
             );
