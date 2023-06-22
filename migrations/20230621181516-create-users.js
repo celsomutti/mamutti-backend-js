@@ -36,6 +36,12 @@ module.exports = {
         validate: {
           notEmpty: { msg: "Campo tipo não pode ser vazio" }
         },
+        references: {
+          model: "usertypes",
+          key: "id"
+        },
+        onDelete: "cascade",
+        onUpdate: "cascade"
       },
       register: {
         allowNull: false,
