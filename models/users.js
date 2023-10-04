@@ -12,13 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Users.init({
-    fullName: DataTypes.STRING(80),
-    userName: DataTypes.STRING(80),
-    password: DataTypes.STRING,
-    userType: DataTypes.INTEGER,
-    register: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    status: DataTypes.BOOLEAN
+    userFullName: DataTypes.STRING,
+    userLogin: DataTypes.STRING,
+    userEmail: DataTypes.STRING,
+    userPassword: DataTypes.STRING,
+    userTypeId: DataTypes.INTEGER,
+    userStatus: DataTypes.BOOLEAN
   }, {
     hooks: {
       beforeCreate: async function(user) {
