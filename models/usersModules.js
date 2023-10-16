@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   UserType.init({
     usersId: DataTypes.INTEGER,
-    typeLuserAccessModulesId: DataTypes.INTEGER,
+    userAccessModulesId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'usersModules',

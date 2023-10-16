@@ -9,23 +9,21 @@ module.exports = {
     async create(request, response) {
         try {
             const {
-                fullName,
-                userName,
-                password,
-                userType,
-                register,
-                email,
-                status
+                userFullName,
+                userLogin,
+                userEmail,
+                userPassword,
+                userTypeId,
+                userStatus
             } = request.body
 
             const User = await user.create({
-                fullName,
-                userName,
-                password,
-                userType,
-                register,
-                email,
-                status
+                userFullName,
+                userLogin,
+                userEmail,
+                userPassword,
+                userTypeId,
+                userStatus
             });
 
             return response.json({ msg: "Usuário cadastrado com sucesso!" });
@@ -40,21 +38,21 @@ module.exports = {
             const { id } = request.params;
 
             const {
-                fullName,
-                userName,
-                userType,
-                register,
-                email,
-                status
+                userFullName,
+                userLogin,
+                userEmail,
+                userPassword,
+                userTypeId,
+                userStatus
             } = request.body
 
             const User = await user.update({
-                fullName,
-                userName,
-                userType,
-                register,
-                email,
-                status
+                userFullName,
+                userLogin,
+                userEmail,
+                userPassword,
+                userTypeId,
+                userStatus
             }, { where: { id } });
 
             return response.json({ msg: "Usuário alterado com sucesso!" });
@@ -66,8 +64,7 @@ module.exports = {
     async findAll(request, response) {
         try {
             const { page } = request.params;
-            const limite = 5;
-            
+            const limite = 5;           
 
             const User = await user.findAndCountAll({
                 order: [
@@ -106,11 +103,11 @@ module.exports = {
             const { userLogin } = request.params;
             
             const {
-                password
+                userPassword
             } = request.body           
 
             const User = await user.update({
-                password 
+                userPassword 
             }, 
                 { where: { userName: userLogin } }
             );
@@ -119,10 +116,11 @@ module.exports = {
             return response.json({ msg: "Não foi possível alterar a senha: " + error });
         }
     },
+
     async compareUserNamePassword(request, response) {
         try {
             const { userLogin } = request.params;
-            const { password  } = request.body
+            const { userPassword  } = request.body
 
             const salt = await bcrypt.genSalt(10);
 
@@ -135,15 +133,15 @@ module.exports = {
                 }
             })            
 
-            bcrypt.hash(password, salt).then(hashedPassword => {
+            bcrypt.hash(userPassword, salt).then(hashedPassword => {
    
                 // Display the hashed password
-                console.log(user.password);
+                console.log(user.userPasswordpassword);
                 console.log(hashedPassword);
                   
                 // Compare the password with hashed password
                 // and return its value 
-                return bcrypt.compare(password, hashedPassword);
+                return bcrypt.compare(userPassword, hashedPassword);
                
             }).then(isMatch => {
                

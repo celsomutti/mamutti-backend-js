@@ -7,21 +7,19 @@ module.exports = {
     async create(request, response) {
         try {
             const {
-                typeDescription,
-                typeLevel,
-                typeOnlyMaster
+                usersId,
+                userAccessModulesId,
             } = request.body
 
             const UserType = await userType.create({
-                typeDescription,
-                typeLevel,
-                typeOnlyMaster
+                usersId,
+                userAccessModulesId,
             });
 
-            return response.json({ msg: "Tipo de usuário cadastrado com sucesso!" });
+            return response.json({ msg: "Acesso cadastrado com sucesso!" });
 
         } catch (error) {
-            return response.json({ msg:"Não foi possivel cadastrar o tipo de usuário: " + error });
+            return response.json({ msg:"Não foi possivel cadastrar o acesso: " + error });
         }
     }, 
 
@@ -30,20 +28,18 @@ module.exports = {
             const { id } = request.params;
 
             const {
-                typeDescription,
-                typeLevel,
-                typeOnlyMaster
+                usersId,
+                userAccessModulesId,
             } = request.body
 
             const UserType = await userType.update({
-                typeDescription,
-                typeLevel,
-                typeOnlyMaster
+                usersId,
+                userAccessModulesId,
             }, { where: { id } });
 
-            return response.json({ msg: "Tipo de usuário alterado com sucesso!" });
+            return response.json({ msg: "Acesso alterado com sucesso!" });
         } catch (error) {
-            return response.json({ msg: "Não foi possível alterar o tipo de usuário: " + error });
+            return response.json({ msg: "Não foi possível alterar o acesso: " + error });
         }
     },
 
@@ -60,24 +56,24 @@ module.exports = {
                 offset: parseInt(page)
             })
 
-            return response.json(UserType);
+            return response.json(UsersModules);
 
         } catch (error) {
-            return response.json("Erro ao listar os tipos de usuários: " + error);
+            return response.json("Erro ao listar os acessos de usuários: " + error);
         }
     },
 
     async delete(request, response) {
         try {
             const { id } = request.params;
-            const UserType = await userType.destroy({
+            const UserType = await UsersModules.destroy({
                 where: {
                     id: id
                 }
             });
-            return response.json({ msg: "Tipo de usuário excluído com sucesso!" });
+            return response.json({ msg: "Acesso excluído com sucesso!" });
         } catch (error) {
-            return response.json({ msg: "Não foi possível excluir o tipo de usuário: " + error });
+            return response.json({ msg: "Não foi possível excluir o acesso: " + error });
         }
     }
 }
