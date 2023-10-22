@@ -1,36 +1,29 @@
 'use strict';
-
-const bcrypt = require('bcrypt');
-
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Users extends Model {
+  class users extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
-      this.belongsTo(models.usertypes, { foreignKey: 'userType' });
+      // define association here
     }
   }
-  Users.init({
+  users.init({
     userFullName: DataTypes.STRING,
     userLogin: DataTypes.STRING,
     userEmail: DataTypes.STRING,
     userPassword: DataTypes.STRING,
+    userType: DataTypes.INTEGER,
     userTypeId: DataTypes.INTEGER,
-    userStatus: DataTypes.BOOLEAN
+    userStatus: DataTypes.TINYINT
   }, {
-    hooks: {
-      beforeCreate: async function(user) {
-        const salt = await bcrypt.genSalt(10); //whatever number you want
-        user.password = await bcrypt.hash(user.password, salt);
-      },
-      beforeUpdate: async function(user) {
-        const salt = await bcrypt.genSalt(10); //whatever number you want
-        user.password = await bcrypt.hash(user.password, salt);
-      } 
-    },
     sequelize,
     modelName: 'users',
   });
-  return Users;
+  return users;
 };
