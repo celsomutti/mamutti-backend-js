@@ -15,11 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   usersModules.init({
     usersId: DataTypes.INTEGER,
-<<<<<<< HEAD
     userAccessModulesId: DataTypes.INTEGER
-=======
-    userAccessModulesId: DataTypes.INTEGER,
->>>>>>> 1f6e24b5ee76784caa6b342f6435bc5ed818bc66
   }, {
     sequelize,
     modelName: 'usersModules',

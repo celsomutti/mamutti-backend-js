@@ -2,21 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('usertypes', {
+    await queryInterface.createTable('userAccessModules', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      description: {
+      moduleName: {
         type: Sequelize.STRING
       },
-      level: {
-        type: Sequelize.INTEGER
+      moduleDescription: {
+        type: Sequelize.STRING
       },
-      onlyMaster: {
-        type: Sequelize.BOOLEAN
+      moduleImageName: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('usertypes');
+    await queryInterface.dropTable('userAccessModules');
   }
 };
