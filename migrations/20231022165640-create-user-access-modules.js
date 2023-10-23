@@ -10,10 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       moduleName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Nome do módulo não pode ser vazio!" }
+        }
       },
       moduleDescription: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Descrição do módulo não pode ser vazio!" }
+        }
       },
       moduleImageName: {
         type: Sequelize.STRING

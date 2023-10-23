@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "al0c@rioca",
+    "password": "Al0c@rioca18",
     "database": "dbMamuttiDev",
-    "host": "127.0.0.1",
+    "host": "201.38.172.137",
     "dialect": "mysql"
   },
   "test": {

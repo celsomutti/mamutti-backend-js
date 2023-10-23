@@ -4,6 +4,7 @@ const { response } = require('express');
 const Op = sequelize.Op;
 const user = model.users;
 const bcrypt = require('bcrypt');
+const salt = bcrypt.genSaltSync();
 
 module.exports = {
     async create(request, response) {
@@ -41,7 +42,6 @@ module.exports = {
                 userFullName,
                 userLogin,
                 userEmail,
-                userPassword,
                 userTypeId,
                 userStatus
             } = request.body
@@ -50,7 +50,6 @@ module.exports = {
                 userFullName,
                 userLogin,
                 userEmail,
-                userPassword,
                 userTypeId,
                 userStatus
             }, { where: { id } });
@@ -109,7 +108,7 @@ module.exports = {
             const User = await user.update({
                 userPassword 
             }, 
-                { where: { userName: userLogin } }
+                { where: { userLogin: userLogin } }
             );
             return response.json({ msg: "Senha alterada com sucesso!" });
         } catch (error) {

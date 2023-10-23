@@ -10,22 +10,48 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userFullName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Campo nome do usuário não pode ser vazio!" }
+        }
       },
       userLogin: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Campo login não pode ser vazio!" }
+        }
       },
       userEmail: {
         type: Sequelize.STRING
       },
       userPassword: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Campo senha não pode ser vazio!" }
+        }
       },
       userTypeId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Campo tipo de usuário não pode ser vazio" }
+        },
+        references: {
+          model: "usertypes",
+          key: "id"
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       userStatus: {
-        type: Sequelize.TINYINT
+        type: Sequelize.TINYINT,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Status do usuário não pode ser vazio!" }
+        }
       },
       createdAt: {
         allowNull: false,

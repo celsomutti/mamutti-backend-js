@@ -10,10 +10,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       usersId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id"
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       userAccessModulesId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "userAccessModules",
+          key: "id"
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       createdAt: {
         allowNull: false,

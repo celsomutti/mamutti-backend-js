@@ -10,10 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       typeDescription: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Descrição do tipo de usuário não pode ser vazio!" }
+        }
       },
       typeLevel: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: {msg: "Nível do usuário não pode ser vazio!" }
+        }
       },
       typeOnlyMaster: {
         type: Sequelize.TINYINT

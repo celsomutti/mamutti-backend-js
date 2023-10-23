@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     /**
@@ -20,9 +21,28 @@ module.exports = (sequelize, DataTypes) => {
     userPassword: DataTypes.STRING,
     userTypeId: DataTypes.INTEGER,
     userStatus: DataTypes.TINYINT
-  }, {
+  },
+  {
     sequelize,
     modelName: 'users',
+  });
+  users.beforeCreate((user, option) => {
+    if (user.isNewRecord) {
+      const salt = bcrypt.genSaltSync();
+      const hash = bcrypt.hashSync(user.getDataValue('userPassword'), salt);
+  
+     // user.password = hash; Not working
+      user.setDataValue('userPassword', hash); // use this instead
+    }
+  });
+  users.beforeUpdate((user, option) => {
+    if (user.isNewRecord) {
+      const salt = bcrypt.genSaltSync();
+      const hash = bcrypt.hashSync(user.getDataValue('userPassword'), salt);
+  
+     // user.password = hash; Not working
+      user.setDataValue('userPassword', hash); // use this instead
+    }
   });
   return users;
 };
