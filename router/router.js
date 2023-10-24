@@ -8,9 +8,9 @@ const typeUser = require('../controller/userType');
 router.post('/criar/usuario', user.create);
 router.get('/listar/usuario/:page', user.findAll);
 router.put('/atualizar/usuario/:id', user.update);
-router.put('/alterasenha/usuario/:userLogin', user.changePassword);
+router.put('/alterasenha/usuario/:userName', user.changePassword);
 router.delete('/excluir/usuario/:id', user.delete);
-router.get('/login/usuario/:userLogin', user.compareUserNamePassword);
+router.get('/login/usuario/:userName', user.compareUserNamePassword);
 
 //Tipos de Usuário
 

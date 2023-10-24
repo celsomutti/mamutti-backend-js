@@ -28,16 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   users.beforeCreate((user, option) => {
     if (user.isNewRecord) {
-      const salt = bcrypt.genSaltSync();
-      const hash = bcrypt.hashSync(user.getDataValue('userPassword'), salt);
-  
-     // user.password = hash; Not working
-      user.setDataValue('userPassword', hash); // use this instead
-    }
-  });
-  users.beforeUpdate((user, option) => {
-    if (user.isNewRecord) {
-      const salt = bcrypt.genSaltSync();
+      const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(user.getDataValue('userPassword'), salt);
   
      // user.password = hash; Not working

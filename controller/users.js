@@ -4,6 +4,7 @@ const { response } = require('express');
 const Op = sequelize.Op;
 const user = model.users;
 const bcrypt = require('bcrypt');
+const { unsubscribe } = require('../router/router');
 const salt = bcrypt.genSaltSync();
 
 module.exports = {
@@ -99,16 +100,19 @@ module.exports = {
 
     async changePassword(request, response) {
         try {
-            const { userLogin } = request.params;
+            const { userName } = request.params;
             
             const {
                 userPassword
             } = request.body           
-
+            
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(userPassword, salt);
+            
             const User = await user.update({
-                userPassword 
+                userPassword: hash
             }, 
-                { where: { userLogin: userLogin } }
+                { where: { userLogin: userName } }
             );
             return response.json({ msg: "Senha alterada com sucesso!" });
         } catch (error) {
@@ -118,29 +122,31 @@ module.exports = {
 
     async compareUserNamePassword(request, response) {
         try {
-            const { userLogin } = request.params;
+            const { userName } = request.params;
             const { userPassword  } = request.body
 
             const salt = await bcrypt.genSalt(10);
 
             const User = await user.findOne({
                 where: {
-                    username: userLogin
-                  },                
-                  include:{
-                    all:true
-                }
-            })            
+                    userLogin: userName
+                  }
+            },
+            ) 
+            
+            console.log(User)
+
+
 
             bcrypt.hash(userPassword, salt).then(hashedPassword => {
    
                 // Display the hashed password
-                console.log(user.userPasswordpassword);
+                console.log(userPassword);
                 console.log(hashedPassword);
                   
                 // Compare the password with hashed password
                 // and return its value 
-                return bcrypt.compare(userPassword, hashedPassword);
+                return bcrypt.compare(hashedPassword, userPassword);
                
             }).then(isMatch => {
                
@@ -156,5 +162,5 @@ module.exports = {
         } catch (error) {
             return response.json ({ msg: "Erro ao listar os usuários: " + error });
         }
-    }
+   }
 }
