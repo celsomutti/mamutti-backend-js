@@ -10,5 +10,5 @@ app.use(cors());
 app.use(router);
 
 app.listen (port, function (request, response){
-    console.log('Servidor roando na porta ' + port);
+    console.log('Servidor rodando na porta ' + port);
 });

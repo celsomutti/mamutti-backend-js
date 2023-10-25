@@ -4,7 +4,6 @@ const { response } = require('express');
 const Op = sequelize.Op;
 const user = model.users;
 const bcrypt = require('bcrypt');
-const { unsubscribe } = require('../router/router');
 const salt = bcrypt.genSaltSync();
 
 module.exports = {
@@ -28,16 +27,19 @@ module.exports = {
                 userStatus
             });
 
-            return response.json({ msg: "Usuário cadastrado com sucesso!" });
+            return response.status(200).json({success:true, msg: "Usuário cadastrado com sucesso!" });
 
         } catch (error) {
-            return response.json({ msg:"Não foi possivel cadastrar o usuário: " + error });
+            return response.status(500).json({success:false, msg:"Não foi possivel cadastrar o usuário: " + error });
         }
     }, 
 
     async update(request, response) {
         try {
             const { id } = request.params;
+
+            const userFind = await user.findOne({where: {id: id}});
+            if (!userFind) throw new Error("Usuário não encontrado.");
 
             const {
                 userFullName,
@@ -55,9 +57,9 @@ module.exports = {
                 userStatus
             }, { where: { id } });
 
-            return response.json({ msg: "Usuário alterado com sucesso!" });
+            return response.status(200).json({success:true, msg: "Usuário alterado com sucesso!" });
         } catch (error) {
-            return response.json({ msg: "Não foi possível alterar o usuário: " + error });
+            return response.status(500).json({success:false, msg: "Não foi possível alterar o usuário: " + error });
         }
     },
 
@@ -67,6 +69,7 @@ module.exports = {
             const limite = 5;           
 
             const User = await user.findAndCountAll({
+                attributes: ['userFullName','userLogin','userEmail','userTypeId','userStatus'],
                 order: [
                     ['id', 'ASC']
                 ],
@@ -77,12 +80,31 @@ module.exports = {
                 }
             })
 
-            return response.json(User);
+            return response.status(200).json(User);
 
         } catch (error) {
-            return response.json("Erro ao listar os usuários: " + error);
+            return response.status(500).json({msg:"Erro ao listar os usuários: " + error});
         }
     },
+
+    async findOneUser(request, response) {
+        try {
+            const { id } = request.params;
+            const limite = 5;           
+
+            const User = await user.findOne({
+                where: {id: id},
+                include:{
+                    all:true
+                }
+            })
+            if (!User) throw new Error("Usuário não encontrado.");
+            return response.status(200).json(User);
+
+        } catch (error) {
+            return response.status(500).json({msg:"Erro ao listar o usuário: " + error});
+        }
+    },    
 
     async delete(request, response) {
         try {
@@ -92,17 +114,16 @@ module.exports = {
                     id: id
                 }
             });
-            return response.json({ msg: "Usuário excluído com sucesso!" });
+            return response.status(200).json({success:true, msg: "Usuário excluído com sucesso!" });
         } catch (error) {
-            return response.json({ msg: "Não foi possível excluir o usuário: " + error });
+            return response.status(500).json({success:false, msg: "Não foi possível excluir o usuário: " + error });
         }
     },
 
     async changePassword(request, response) {
-        try {
-            const { userName } = request.params;
-            
+        try {            
             const {
+                userName,
                 userPassword
             } = request.body           
             
@@ -114,53 +135,22 @@ module.exports = {
             }, 
                 { where: { userLogin: userName } }
             );
-            return response.json({ msg: "Senha alterada com sucesso!" });
+            return response.status(200).json({success:true, msg:"Senha alterada com sucesso!" });
         } catch (error) {
-            return response.json({ msg: "Não foi possível alterar a senha: " + error });
+            return response.status(500).json({success:false, msg:"Não foi possível alterar a senha: " + error });
         }
     },
 
     async compareUserNamePassword(request, response) {
-        try {
-            const { userName } = request.params;
-            const { userPassword  } = request.body
-
-            const salt = await bcrypt.genSalt(10);
-
-            const User = await user.findOne({
-                where: {
-                    userLogin: userName
-                  }
-            },
-            ) 
-            
-            console.log(User)
-
-
-
-            bcrypt.hash(userPassword, salt).then(hashedPassword => {
-   
-                // Display the hashed password
-                console.log(userPassword);
-                console.log(hashedPassword);
-                  
-                // Compare the password with hashed password
-                // and return its value 
-                return bcrypt.compare(hashedPassword, userPassword);
-               
-            }).then(isMatch => {
-               
-                // If password matches then display true
-                return response.json({ msg: 'Senha válida!' });
-            }).catch(err => {
-              
-                // Display error log
-                console.log(err);
-                return response.json({ msg: 'Senha inválida: ' + err });
-            });       
-
+        try{
+            const {userName, password} = request.body;
+            const User = await user.findOne({where: {userLogin: userName}});
+            if (!User) throw new Error("Usuário não encontrado.");
+            const isPasswordValid = await bcrypt.compare(password, User.userPassword);
+            if (!isPasswordValid) throw new Error("Senha incorreta");
+            return response.status(200).json({success:true, msg:"Login efetuado com sucesso!"})
         } catch (error) {
-            return response.json ({ msg: "Erro ao listar os usuários: " + error });
+            return response.status(500).json({success:false, msg:"Não foi possível verificar o login: " + error});   
         }
    }
 }
