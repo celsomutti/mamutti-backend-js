@@ -2,6 +2,6 @@ npx sequelize-cli model:generate --force --name users --attributes userFullName:
 
 npx sequelize-cli model:generate --force --name usertypes --attributes typeDescription:string,typeLevel:integer,typeOnlyMaster:tinyint
 
-npx sequelize-cli model:generate --force --name userAccessModules --attributes moduleName:string,moduleDescription:string,moduleImageName:string
+npx sequelize-cli model:generate --force --name userAccessModules --attributes moduleName:string,moduleDescription:string,moduleImageName:string,moduleIdMaster:integer
 
 npx sequelize-cli model:generate --force --name usersModules --attributes usersId:integer,userAccessModulesId:integer

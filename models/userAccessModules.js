@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   userAccessModules.init({
     moduleName: DataTypes.STRING,
     moduleDescription: DataTypes.STRING,
-    moduleImageName: DataTypes.STRING
+    moduleImageName: DataTypes.STRING,
+    moduleIdMaster: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'userAccessModules',

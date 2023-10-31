@@ -69,7 +69,7 @@ module.exports = {
             const limite = 5;           
 
             const User = await user.findAndCountAll({
-                attributes: ['userFullName','userLogin','userEmail','userTypeId','userStatus'],
+                //attributes: ['userFullName','userLogin','userEmail','userTypeId','userStatus'],
                 order: [
                     ['id', 'ASC']
                 ],

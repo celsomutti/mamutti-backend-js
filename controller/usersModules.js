@@ -1,7 +1,7 @@
 const sequelize = require('sequelize');
 const model = require('../models');
 const { response } = require('express');
-const userType = model.usertypes;
+const UserModules = model.userModules;
 
 module.exports = {
     async create(request, response) {
@@ -11,7 +11,7 @@ module.exports = {
                 userAccessModulesId,
             } = request.body
 
-            const UserType = await userType.create({
+            const UserModules = await UserModules.create({
                 usersId,
                 userAccessModulesId,
             });
@@ -32,7 +32,7 @@ module.exports = {
                 userAccessModulesId,
             } = request.body
 
-            const UserType = await userType.update({
+            const UserModules = await UserModules.update({
                 usersId,
                 userAccessModulesId,
             }, { where: { id } });
@@ -48,7 +48,7 @@ module.exports = {
             const { page } = request.params;
             const limite = 5;
 
-            const UserType = await userType.findAndCountAll({
+            const UserModules = await useUserModulesrType.findAndCountAll({
                 order: [
                     ['id', 'ASC']
                 ],
@@ -56,7 +56,7 @@ module.exports = {
                 offset: parseInt(page)
             })
 
-            return response.json(UsersModules);
+            return response.json(UserModules);
 
         } catch (error) {
             return response.json("Erro ao listar os acessos de usuários: " + error);
@@ -66,7 +66,7 @@ module.exports = {
     async delete(request, response) {
         try {
             const { id } = request.params;
-            const UserType = await UsersModules.destroy({
+            const UserModules = await UserModules.destroy({
                 where: {
                     id: id
                 }
